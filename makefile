@@ -53,7 +53,7 @@ $(OBJ_DIR)/matrix.o: $(SRC_DIR)/matrix.cpp $(SRC_DIR)/matrix.h
 
 
 clean:
-	rm -f $(OBJ_DIR).o
+	rm -f $(OBJ_DIR)/*.o
 	rm vis.exe
 	rm *.graph
 	rm *.pyc
