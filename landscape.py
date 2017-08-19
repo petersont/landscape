@@ -1,8 +1,8 @@
 from graph import *
 import random
 
-def rand(H, V):
-    return Vector(H * random.random(), H * random.random(), V * random.random())
+def rand(A, B, V):
+    return Vector((B-A) * random.random() + A, (B-A) * random.random() + A, V * random.random())
 
 n = 500
 
@@ -10,7 +10,7 @@ cities = []
 
 i=0
 while i < n:
-    cities.append(rand(200, 10))
+    cities.append(rand(-100, 100, 10))
     i+=1
 
 
