@@ -25,7 +25,8 @@ CORE = \
 	$(OBJ_DIR)/math3d.o \
 	$(OBJ_DIR)/matrix.o \
 	$(OBJ_DIR)/util.o \
-	$(OBJ_DIR)/environment.o
+	$(OBJ_DIR)/panapp.o \
+	$(OBJ_DIR)/graphapp.o
 
 run: out.graph vis.exe
 	./vis.exe out.graph
@@ -42,8 +43,11 @@ vis.exe: $(CORE) $(SRC_DIR)/visualizer.cpp
 $(OBJ_DIR)/util.o: $(SRC_DIR)/util.cpp $(SRC_DIR)/util.h
 	c++ $(ODEBUG) $(OPTIMIZATION) -c $(SRC_DIR)/util.cpp -o $(OBJ_DIR)/util.o
 
-$(OBJ_DIR)/environment.o: $(SRC_DIR)/environment.cpp $(SRC_DIR)/environment.h
-	c++ $(ODEBUG) $(OPTIMIZATION) -c $(SRC_DIR)/environment.cpp -o $(OBJ_DIR)/environment.o
+$(OBJ_DIR)/panapp.o: $(SRC_DIR)/panapp.cpp $(SRC_DIR)/panapp.h
+	c++ $(ODEBUG) $(OPTIMIZATION) -c $(SRC_DIR)/panapp.cpp -o $(OBJ_DIR)/panapp.o
+
+$(OBJ_DIR)/graphapp.o: $(SRC_DIR)/graphapp.cpp $(SRC_DIR)/graphapp.h
+	c++ $(ODEBUG) $(OPTIMIZATION) -c $(SRC_DIR)/graphapp.cpp -o $(OBJ_DIR)/graphapp.o
 
 $(OBJ_DIR)/math3d.o: $(SRC_DIR)/math3d.cpp $(SRC_DIR)/math3d.h
 	c++ $(ODEBUG) $(OPTIMIZATION) -c $(SRC_DIR)/math3d.cpp -o $(OBJ_DIR)/math3d.o

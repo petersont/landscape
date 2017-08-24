@@ -1,22 +1,93 @@
-#include "environment.h"
+#include "graphapp.h"
 
-class Visualizer : public Environment {
-public:
-    Visualizer(
-        std::vector<Vector3d> nodes,
-        std::vector<pair<int,int> > edges)
-        : nodes(nodes)
-        , edges(edges){}
+#ifdef __APPLE_CC__
+#include <glut/glut.h>
+#else
+#include <GL/glut.h>
+#endif
 
-protected:
-    std::vector<Vector3d> nodes;
-    std::vector<pair<int,int> > edges;
 
-    void draw() const;
+void fdisplay();
+void freshape(int w, int h);
+void fidle();
+void fmotion(int x, int y);
+void fbutton( int b, int state, int x, int y );
+void fkeyboard(unsigned char inkey, int x, int y);
 
-private:
-    Vector3d torusPoint(double theta, double phi) const;
-};
+App* gApp = NULL;
+
+void initGlut(
+    const char* windowName,
+    int windowSizeX,
+    int windowSizeY)
+{
+    int argc = 0;
+    char** args = NULL;
+
+    // initilaize glut
+    glutInit( &argc, args );
+    glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH );
+
+    // bring up a window called "Mesh"
+    glutInitWindowSize( windowSizeX, windowSizeY );
+    glutCreateWindow( windowName );
+}
+
+void glEnables()
+{
+    glClearColor(1, 1, 1, 1);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+}
+
+void mainLoop(App* app)
+{
+    gApp = app;
+
+    //Install the functions in this file as callbacks
+    glutDisplayFunc(fdisplay);
+    glutReshapeFunc(freshape);
+    glutIdleFunc(fidle);
+    glutMotionFunc(fmotion);
+    glutMouseFunc(fbutton);
+    glutKeyboardFunc(fkeyboard);
+
+    //leave the rest to glut
+    glutMainLoop();
+}
+
+void fdisplay()
+{
+    gApp->compute();
+    gApp->display();
+    glutSwapBuffers();
+    glutPostRedisplay();
+}
+
+void freshape(int w, int h)
+{
+    gApp->reshape(h,w);
+}
+
+void fbutton( int b, int state, int x, int y )
+{
+    gApp->button(b,state,x,y); glutPostRedisplay();
+}
+
+void fidle()
+{
+    gApp->idle();
+}
+
+void fkeyboard(unsigned char inkey, int x, int y)
+{
+    gApp->keyboard(inkey, x, y); glutPostRedisplay();
+}
+
+void fmotion(int x, int y)
+{
+    gApp->motion(x,y); glutPostRedisplay();
+}
 
 
 int main(int argc, char** args)
@@ -29,67 +100,12 @@ int main(int argc, char** args)
 
     printf("Use +/- to zoom\n");
 
-    std::vector<Vector3d> nodes;
-    std::vector<pair<int,int> > edges;
+    GraphApp app(args[1]);
+    app.init();
 
-    std::string input = readFile(args[1]);
+    initGlut("Behold", 640, 480);
+    glEnables();
 
-    std::vector<std::string> lines = components(input, '\n');
-    for( std::vector<std::string>::iterator itr = lines.begin(); itr != lines.end(); itr++ )
-    {
-        std::string& line(*itr);
-
-        std::vector<std::string> lc = components( line, ',' );
-
-        if( lc.size() == 3 )
-        {
-            nodes.push_back(
-                Vector3d( stringToFloat(flattenWhitespace(lc[0])),
-                          stringToFloat(flattenWhitespace(lc[1])),
-                          stringToFloat(flattenWhitespace(lc[2])) ) );
-        }
-
-        if( lc.size() == 2 )
-        {
-            edges.push_back(
-                std::pair<int,int>( stringToInt(flattenWhitespace(lc[0])),
-                      stringToInt(flattenWhitespace(lc[1])) ) );
-        }
-    }
-
-    Visualizer E(nodes, edges);
-    E.init();
-    E.initGlut(argc, args);
-    E.mainLoop();
+    mainLoop(&app);
 }
-
-
-void Visualizer::draw() const
-{
-    drawAxes();
-
-    glColor3f(0, 0.5, 1);
-    glPushMatrix();
-
-
-    glBegin(GL_POINTS);
-        for(std::vector<Vector3d>::const_iterator itr = nodes.begin(); itr!=nodes.end(); itr++)
-            glVertex3f(itr->x, itr->y, itr->z);
-    glEnd();
-
-
-    glBegin(GL_LINES);
-    for(std::vector<pair<int, int> >::const_iterator itr = edges.begin(); itr!=edges.end(); itr++)
-    {
-        const pair<int, int>& edge(*itr);
-        int a = edge.first;
-        int b = edge.second;
-        glVertex3f(nodes[a].x, nodes[a].y, nodes[a].z);
-        glVertex3f(nodes[b].x, nodes[b].y, nodes[b].z);
-    }
-    glEnd();
-
-    glPopMatrix();
-}
-
 
