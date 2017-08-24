@@ -33,8 +33,8 @@ run: out.graph vis.exe
 out.graph: landscape.py graph.py
 	python landscape.py > out.graph
 
-vis.exe: $(CORE) $(SRC_DIR)/visualizer.cpp
-	c++ $(DEBUG) $(OPTIMIZATION) $(CORE) $(SRC_DIR)/visualizer.cpp -o vis.exe $(GLFLAGS)
+vis.exe: $(CORE) $(SRC_DIR)/glut-main.cpp
+	c++ $(DEBUG) $(OPTIMIZATION) $(CORE) $(SRC_DIR)/glut-main.cpp -o vis.exe $(GLFLAGS)
 
 
 ## .o files

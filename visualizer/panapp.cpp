@@ -4,10 +4,8 @@
 #include "util.h"
 #include "math3d.h"
 
-
 using namespace std;
 using namespace lib3d;
-
 
 Vector2d PanApp::flip(int x, int y) const
 {
