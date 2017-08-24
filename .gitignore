@@ -3,3 +3,4 @@
 .DS_Store
 *.graph
 obj/*.o
+bin/*

@@ -9,7 +9,6 @@
 
 void fdisplay();
 void freshape(int w, int h);
-void fidle();
 void fmotion(int x, int y);
 void fbutton( int b, int state, int x, int y );
 void fkeyboard(unsigned char inkey, int x, int y);
@@ -39,12 +38,11 @@ void mainLoop(App* app)
     gApp = app;
 
     //Install the functions in this file as callbacks
-    glutDisplayFunc(fdisplay);
-    glutReshapeFunc(freshape);
-    glutIdleFunc(fidle);
-    glutMotionFunc(fmotion);
-    glutMouseFunc(fbutton);
-    glutKeyboardFunc(fkeyboard);
+    glutDisplayFunc( fdisplay );
+    glutReshapeFunc( freshape );
+    glutMotionFunc( fmotion );
+    glutMouseFunc( fbutton );
+    glutKeyboardFunc( fkeyboard );
 
     //leave the rest to glut
     glutMainLoop();
@@ -67,29 +65,41 @@ void fdisplay()
 
 void freshape(int w, int h)
 {
-    gApp->reshape(h,w);
+    gApp->resize(w,h);
 }
 
-void fbutton( int b, int state, int x, int y )
-{
-    gApp->button(b,state,x,y);
-    glutPostRedisplay();
-}
+bool mouseDown = false;
 
-void fidle()
+void fbutton( int but, int state, int x, int y )
 {
-    gApp->idle();
-}
-
-void fkeyboard(unsigned char inkey, int x, int y)
-{
-    gApp->keyboard(inkey, x, y);
-    glutPostRedisplay();
+    if( but == GLUT_LEFT_BUTTON )
+    {
+        if( state == GLUT_DOWN )
+        {
+            mouseDown = true;
+            gApp->mouseDown(x, y);
+        }
+        else if( state == GLUT_UP )
+        {
+            mouseDown = false;
+            gApp->mouseUp(x, y);
+        }
+        glutPostRedisplay();
+    }
 }
 
 void fmotion(int x, int y)
 {
-    gApp->motion(x,y);
+    if( mouseDown )
+    {
+        gApp->mouseDragged(x, y);
+        glutPostRedisplay();
+    }
+}
+
+void fkeyboard(unsigned char inkey, int x, int y)
+{
+    gApp->keyDown(inkey);
     glutPostRedisplay();
 }
 

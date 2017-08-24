@@ -1,35 +1,28 @@
 #ifndef _APP_
 #define _APP_
 
+#include "math3d.h"
+
 class App
 {
 public:
     /*  gets called with opengl context once before any drawing.*/
     virtual void init() {}
 
-    /*  reshape gets called directly by the glut reshape function.*/
-    virtual void reshape(int w, int h) {}
+    /*  gets called when the window is resized.*/
+    virtual void resize(int w, int h) {}
 
-    /*  idle gets called by the glut idle function.*/
-    virtual void idle() {}
-
-    /*  button and motion get called by the like-named glut functions.
-        Think twice before overriding if the same job could be done with mouseUp
-        mouseDragged mouseDown*/
-    virtual void button( int b, int state, int x, int y ) {}
-    virtual void motion( int x, int y ) {}
-
-    /*  keyboard gets called directly by the glut function keyboard.
-        It should be overridden to handle key events.*/
-    virtual void keyboard(unsigned char inkey, int x, int y) {}
+    /*  callbacks for keyboard button presses.*/
+    virtual void keyDown(unsigned char inkey) {}
+    virtual void keyUp(unsigned char inkey) {}
 
     /*  mouseDown() get's called when the mouse button is first depressed.
         Override mouseDown to implement new mouse click behavior.  Return true
         to stop Environment from interpreting the mouse event and panning the
         camera.*/
-    virtual bool mouseDown(const lib3d::Vector2d& C) {return false;}
-    virtual void mouseDragged(const lib3d::Vector2d& C) {}
-    virtual void mouseUp(const lib3d::Vector2d& C) {}
+    virtual void mouseDown(double x, double y) {}
+    virtual void mouseDragged(double x, double y) {}
+    virtual void mouseUp(double x, double y) {}
 
     /*  compute() is called by display() when the valid flag is set false.
         Override compute() to do work to compute what to draw.  Call

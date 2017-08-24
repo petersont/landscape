@@ -7,11 +7,6 @@
 using namespace std;
 using namespace lib3d;
 
-Vector2d PanApp::flip(int x, int y) const
-{
-    Vector2d C( x,windowHeight-y );
-    return C;
-}
 
 PanApp::PanApp()
     : cameraTheta(0)
@@ -74,7 +69,7 @@ void PanApp::display() const
     glLoadIdentity();
     gluPerspective(
         40.0, /* field of view in degree */
-        windowWidth/windowHeight, /* aspect ratio */
+        windowWidth / windowHeight, /* aspect ratio */
         0.01 * cameraRadius, /* Z near */
         100 * cameraRadius ); /* Z far */
 
@@ -146,50 +141,7 @@ void PanApp::drawAxes() const
 }
 
 
-void PanApp::button( int b, int state, int x, int y )
-{
-    if( state == 0 ) //button down
-    {
-        if( ! mouseDown( flip(x, y) ) )
-        {
-            firstX = x;
-            firstY = y;
-            firstTheta = cameraTheta;
-            firstPhi = cameraPhi;
-            panOn = true;
-        }
-    }
-
-    if( state == 1 ) //button up
-    {
-        mouseUp( flip(x, y) );
-        panOn = false;
-    }
-}
-
-
-bool PanApp::mouseDown(const Vector2d& C)
-{
-    return false;
-}
-
-
-void PanApp::motion(int x, int y)
-{
-    if( panOn )
-    {
-        cameraTheta = firstTheta - 0.01*(x-firstX);
-        cameraPhi = firstPhi + 0.01*(y-firstY);
-
-        if(cameraPhi>0.5*PI) cameraPhi = 0.5*PI;
-        if(cameraPhi<-0.5*PI) cameraPhi = -0.5*PI;
-    }
-
-    mouseDragged( flip(x, y) );
-}
-
-
-void PanApp::reshape(int h, int w)
+void PanApp::resize(int w, int h)
 {
     windowHeight = h;
     windowWidth = w;
@@ -200,7 +152,7 @@ void PanApp::reshape(int h, int w)
     glLoadIdentity();
     gluPerspective(
         40.0, /* field of view in degree */
-        windowWidth/windowHeight, /* aspect ratio */
+        windowWidth / windowHeight, /* aspect ratio */
         0.01 * cameraRadius, /* Z near */
         100 * cameraRadius ); /* Z far */
 
@@ -209,7 +161,7 @@ void PanApp::reshape(int h, int w)
 }
 
 
-void PanApp::keyboard(unsigned char inkey, int x, int y)
+void PanApp::keyDown(unsigned char inkey)
 {
     switch(inkey)
     {
@@ -228,7 +180,6 @@ void PanApp::keyboard(unsigned char inkey, int x, int y)
     }
 }
 
-
 void PanApp::compute()
 {
 }
@@ -237,12 +188,27 @@ void PanApp::idle()
 {
 }
 
-void PanApp::mouseDragged(const Vector2d& C)
+void PanApp::mouseDown(double x, double y)
 {
+    firstX = x;
+    firstY = y;
+    firstTheta = cameraTheta;
+    firstPhi = cameraPhi;
+    panOn = true;
 }
 
-void PanApp::mouseUp(const Vector2d& C)
+void PanApp::mouseDragged(double x, double y)
 {
+    cameraTheta = firstTheta - 0.01*(x-firstX);
+    cameraPhi = firstPhi + 0.01*(y-firstY);
+
+    if(cameraPhi>0.5*PI) cameraPhi = 0.5*PI;
+    if(cameraPhi<-0.5*PI) cameraPhi = -0.5*PI;
+}
+
+void PanApp::mouseUp(double x, double y)
+{
+    panOn = false;
 }
 
 void PanApp::drawOnScreen() const

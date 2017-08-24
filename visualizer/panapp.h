@@ -21,31 +21,24 @@ public:
     virtual ~PanApp();
 
 public:
-    /*  reshape gets called directly by the glut reshape function.*/
-    virtual void reshape(int w, int h);
+    /*  resize gets called directly by the glut reshape function.*/
+    virtual void resize(int w, int h);
 
     /*  idle gets called by the glut idle function.*/
     virtual void idle();
 
-    /*  button and motion get called by the like-named glut functions.
-        Think twice before overriding if the same job could be done with mouseUp
-        mouseDragged mouseDown*/
-    virtual void button( int b, int state, int x, int y );
-    virtual void motion( int x, int y );
-
-    /*  keyboard gets called directly by the glut function keyboard.
-        It should be overridden to handle key events.*/
-    virtual void keyboard(unsigned char inkey, int x, int y);
+    /*  callbacks for keyboard button presses.*/
+    virtual void keyDown(unsigned char inkey);
 
     /*  mouseDown() get's called when the mouse button is first depressed.
         Override mouseDown to implement new mouse click behavior.  Return true
         to stop Environment from interpreting the mouse event and panning the
         camera.*/
-    virtual bool mouseDown(const Vector2d& C);
+    virtual void mouseDown(double x, double y);
 
     /*  mouseDragged()*/
-    virtual void mouseDragged(const Vector2d& C);
-    virtual void mouseUp(const Vector2d& C);
+    virtual void mouseDragged(double x, double y);
+    virtual void mouseUp(double x, double y);
 
     /*  compute() is called by display() when the valid flag is set false.
         Override compute() to do work to compute what to draw.  Call
@@ -117,9 +110,6 @@ protected:
     /*  lookAt sets the camera's lookAt point*/
     void lookAt(const Vector3d& V);
 
-    /*  flip reports the screen location of the point given coordinates of the
-        form that gl button etc reports them (button is annoying in that way)*/
-    Vector2d flip(int x, int y) const;
 public:
     virtual void init();
 };
