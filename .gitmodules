@@ -1,0 +1,3 @@
+[submodule "visualizer/sdl"]
+	path = visualizer/sdl
+	url = https://github.com/2-complex/SDL-mirror
