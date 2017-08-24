@@ -33,12 +33,6 @@ void initGlut(
     glutCreateWindow( windowName );
 }
 
-void glEnables()
-{
-    glClearColor(1, 1, 1, 1);
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_BLEND);
-}
 
 void mainLoop(App* app)
 {
@@ -58,6 +52,13 @@ void mainLoop(App* app)
 
 void fdisplay()
 {
+    static bool firstTime = true;
+    if( firstTime )
+    {
+        gApp->init();
+        firstTime = false;
+    }
+
     gApp->compute();
     gApp->display();
     glutSwapBuffers();
@@ -71,7 +72,8 @@ void freshape(int w, int h)
 
 void fbutton( int b, int state, int x, int y )
 {
-    gApp->button(b,state,x,y); glutPostRedisplay();
+    gApp->button(b,state,x,y);
+    glutPostRedisplay();
 }
 
 void fidle()
@@ -81,12 +83,14 @@ void fidle()
 
 void fkeyboard(unsigned char inkey, int x, int y)
 {
-    gApp->keyboard(inkey, x, y); glutPostRedisplay();
+    gApp->keyboard(inkey, x, y);
+    glutPostRedisplay();
 }
 
 void fmotion(int x, int y)
 {
-    gApp->motion(x,y); glutPostRedisplay();
+    gApp->motion(x,y);
+    glutPostRedisplay();
 }
 
 
@@ -98,13 +102,9 @@ int main(int argc, char** args)
         return 0;
     }
 
-    printf("Use +/- to zoom\n");
-
     GraphApp app(args[1]);
-    app.init();
 
     initGlut("Behold", 640, 480);
-    glEnables();
 
     mainLoop(&app);
 }

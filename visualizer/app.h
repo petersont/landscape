@@ -4,6 +4,9 @@
 class App
 {
 public:
+    /*  gets called with opengl context once before any drawing.*/
+    virtual void init() {}
+
     /*  reshape gets called directly by the glut reshape function.*/
     virtual void reshape(int w, int h) {}
 

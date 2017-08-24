@@ -2,12 +2,7 @@
 #ifndef _PANAPP_
 #define _PANAPP_
 
-#ifdef __APPLE_CC__
-#include <glut/glut.h>
-#else
-#include <GL/glut.h>
-#endif
-
+#include "opengl.h"
 #include "util.h"
 #include "math3d.h"
 
@@ -125,23 +120,8 @@ protected:
     /*  flip reports the screen location of the point given coordinates of the
         form that gl button etc reports them (button is annoying in that way)*/
     Vector2d flip(int x, int y) const;
-
-    /*  clickNearPoint returns whether the click point C is within distance tol
-        of the point P on the screen.  This is helpful for iterating through a
-        list of items which the user can click on and for each one, checking if
-        the mouse location is close enough to be a hit*/
-    bool clickNearPoint(const Vector2d& C, const Vector3d& P, double tol) const;
-
-    /*  pointLoc gives screen coordinates for a 3d point*/
-    Vector2d pointLoc(double x, double y, double z) const;
-
 public:
-    /*  init initializes all member variables that need it.
-        The function init MUST be called before anything else.*/
     virtual void init();
-
-    /*  Call this to start the glut machine.*/
-    void mainLoop();
 };
 
 

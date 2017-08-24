@@ -34,6 +34,12 @@ void PanApp::init()
     cameraRadius = 80;
     cameraTheta = PI / 3.0;
     cameraPhi = PI / 6;
+
+    glClearColor(1, 1, 1, 1);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+
+    printf("Use +/- to zoom\n");
 }
 
 Vector3d PanApp::cameraLoc() const
