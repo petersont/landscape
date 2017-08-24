@@ -23,7 +23,6 @@ endif
 
 CORE = \
 	$(OBJ_DIR)/math3d.o \
-	$(OBJ_DIR)/matrix.o \
 	$(OBJ_DIR)/util.o \
 	$(OBJ_DIR)/panapp.o \
 	$(OBJ_DIR)/graphapp.o
@@ -51,9 +50,6 @@ $(OBJ_DIR)/graphapp.o: $(SRC_DIR)/graphapp.cpp $(SRC_DIR)/graphapp.h
 
 $(OBJ_DIR)/math3d.o: $(SRC_DIR)/math3d.cpp $(SRC_DIR)/math3d.h
 	c++ $(ODEBUG) $(OPTIMIZATION) -c $(SRC_DIR)/math3d.cpp -o $(OBJ_DIR)/math3d.o
-
-$(OBJ_DIR)/matrix.o: $(SRC_DIR)/matrix.cpp $(SRC_DIR)/matrix.h
-	c++ $(ODEBUG) $(OPTIMIZATION) -c $(SRC_DIR)/matrix.cpp -o $(OBJ_DIR)/matrix.o
 
 
 clean:
